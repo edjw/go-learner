@@ -26,7 +26,7 @@ func logValidationError(person Person, err error) {
 	}
 }
 
-func createNewPerson(name string, age int, handed string) (*Person, error) { // returns a pointer to a Person struct and an error
+func createNewPerson(name string, age int, handed string) (*Person, error) { // returns a pointer to the memory address of a Person struct (or nil if there's an error), and an error
 
 	person := Person{Name: name, Age: age, Handedness: handed}
 
@@ -37,19 +37,21 @@ func createNewPerson(name string, age int, handed string) (*Person, error) { // 
 		return nil, err // return a nil pointer and the error if the data is invalid
 	}
 
-	return &person, nil // return a pointer to the person struct if the data is valid
-
-	// a pointer is a memory address that points to the location of a value in memory
-	// a value is the actual data stored in memory
+	return &person, nil // return the pointer to the memory address holding the person struct and nil if the data is valid
 
 }
 
-func logPerson(p *Person, err error) {
-	if p != nil && err == nil {
-		p := *p // dereference the pointer to get the actual value
+// This function will print out the details of a Person only if that Person exists (pPointer != nil) and there's no error (err == nil)
+func logPerson(personPointer *Person, err error) {
+	if personPointer != nil && err == nil {
+
+		// pPointer is a pointer – a signpost to the actual data. We "dereference" it with *pPointer to follow the signpost to get the actual data. We can do whatever we want with that data including then assign that data to a new variable.
+		actualPerson := *personPointer
+
+		// actualPerson is a Person struct not a pointer anymore. We can do whatever we want with that struct including print it out.
 
 		// Do something with the person here if they're successfully created and validated
-		fmt.Printf("Created new person: %+v\n", p)
+		fmt.Printf("Created new person: %+v\n", actualPerson)
 	}
 }
 
@@ -62,4 +64,5 @@ func main() {
 	logPerson(p1, err1)
 	logPerson(p2, err2)
 	logPerson(p3, err3)
+
 }
